@@ -8,7 +8,11 @@ module.exports = function(grunt) {
         'tasks/*.js'
       ],
       options: {
-        jshintrc: '.jshintrc'
+        '-W055': true,
+        '-W040': true,
+        '-W064': true,
+        '-W061': true,
+        '-W107': true
       }
     },
 
@@ -16,13 +20,19 @@ module.exports = function(grunt) {
     artoo: {
       dev: {
         options: {
-        },
-        files: []
+          random: true
+        }
       },
       prod: {
-        options: {
-        },
-        files: []
+        options: {},
+        src: './test/resources/dummy-script.js'
+      },
+      multi: {
+        options: {},
+        src: [
+          './test/resources/dummy-script1.js',
+          './test/resources/dummy-script2.js'
+        ]
       }
     },
   });
@@ -32,12 +42,11 @@ module.exports = function(grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'artoo_bookmarklet', 'nodeunit']);
+  grunt.registerTask('test', ['artoo']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['jshint', 'artoo']);
 };

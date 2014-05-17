@@ -4,10 +4,11 @@
  * This task is supposed to create an ad-hoc artoo bookmarklet
  */
 var uglify = require('uglify-js'),
-    cp = require('copy-paste').noConflict();
+    cp = require('copy-paste').noConflict(),
+    defaultOptions = require('../config.json');
 
 // Templates
-var bookmarklet =
+var template =
 [";(function(undefined) {",
 
   "// Creating script",
@@ -15,14 +16,21 @@ var bookmarklet =
   "    script = document.createElement('script');",
 
   "// Setting correct attributes",
-  "script.src = '//raw.githubusercontent.com/medialab/artoo/master/build/artoo.min.js';",
+  "script.src = '<%= url %>';",
   "script.type = 'text/javascript';",
   "script.id = 'artoo_injected_script';",
-  "script.setAttribute('settings', JSON.stringify('<%= settings %>'));",
+  "script.setAttribute('settings', JSON.stringify(<%= settings %>));",
+
+  "<%= random %>",
 
   "// Appending to body",
   "body.appendChild(script);",
 "})();"].join('\n');
+
+// Shorteners
+function minify(string) {
+  return uglify.minify(string, {fromString: true}).code;
+}
 
 module.exports = function(grunt) {
 
@@ -30,55 +38,72 @@ module.exports = function(grunt) {
   function multitask() {
   
     // Default options
-    var options = this.options({
-      url: 'https://raw.githubusercontent.com/' +
-           'medialab/artoo/master/build/artoo.min.js',
-      dest: './artoo-bookmarklet.min.js',
-      files: null,
-      script: null,
-      eval: null,
-      gist: null,
-      settings: {}
-    });
+    var options = this.options(defaultOptions),
+        bookmark;
+
+    // Default destination
+    options.dest = options.dest ||
+      'artoo.' + this.target + '.bookmarklet.min.js';
+
+    // If user specified files, we need to concat/uglify them to be
+    // evaluated by artoo on initialization.
+    if (this.files.length > 0) {
+
+      // Concatenation while filtering for inexistant files.
+      var s = this.files[0].src.filter(function(filepath) {
+        if (!grunt.file.exists(filepath)) {
+          grunt.log.warn('Souce file "' + filepath + '" not found.');
+          return false;
+        }
+        else {
+          return true;
+        }
+      }).map(function(filepath) {
+
+        // Reading file
+        return grunt.file.read(filepath);
+      }).join('\n');
+
+      // Minifying the scripts
+      s = minify(s);
+
+      // Assigning to settings
+      options.settings.eval = JSON.stringify(s);
+    }
+
 
     // Rendering the bookmarklet template
-    var rendered = grunt.template.process(
-      bookmarklet,
+    bookmark = grunt.template.process(
+      template,
       {
         data: {
-          settings: JSON.stringify(options.settings)
+          settings: JSON.stringify(options.settings),
+          url: options.url,
+          random: options.random ?
+            "var r = Math.random();" +
+            "script.src += '?r=' + r;" :
+            ""
         }
       }
     );
 
     // Minifying the template
-    var minified = uglify.minify(rendered, {fromString: true}).code;
+    bookmark = minify(bookmark);
 
-    // // Iterate over all specified file groups.
-    // this.files.forEach(function(f) {
-    //   // Concat specified files.
-    //   var src = f.src.filter(function(filepath) {
-    //     // Warn on and remove invalid source files (if nonull was set).
-    //     if (!grunt.file.exists(filepath)) {
-    //       grunt.log.warn('Source file "' + filepath + '" not found.');
-    //       return false;
-    //     } else {
-    //       return true;
-    //     }
-    //   }).map(function(filepath) {
-    //     // Read file source.
-    //     return grunt.file.read(filepath);
-    //   }).join(grunt.util.normalizelf(options.separator));
+    // Adding javascript prefix to be run as URL
+    bookmark = 'javascript: ' + bookmark;
 
-    //   // Handle options.
-    //   src += options.punctuation;
+    // If clipboard, we copy the bookmark
+    if (options.clipboard) {
+      cp.copy(bookmark);
+      grunt.log.ok(this.target + ' bookmarklet has been copied ' +
+                     'to the clipboard');
+    }
 
-    //   // Write the destination file.
-    //   grunt.file.write(f.dest, src);
-
-    //   // Print a success message.
-    //   grunt.log.writeln('File "' + f.dest + '" created.');
-    // });
+    // Writing to file
+    grunt.file.write(options.dest, bookmark);
+    grunt.log.ok(this.target + ' bookmarklet has been written to ' +
+                 options.dest);
   }
 
   // Registering the task
