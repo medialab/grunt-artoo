@@ -36,18 +36,18 @@ module.exports = function(grunt) {
 
   // artoo's grunt multitask
   function multitask() {
-  
+
     // Default options
     var options = this.options(defaultOptions),
         bookmark;
 
     // Default destination
-    options.dest = options.dest ||
+    var dest = (this.files[0] && this.files[0].dest) ||
       'artoo.' + this.target + '.bookmarklet.min.js';
 
     // If user specified files, we need to concat/uglify them to be
     // evaluated by artoo on initialization.
-    if (this.files.length > 0) {
+    if (this.files[0] && this.files[0].src) {
 
       // Concatenation while filtering for inexistant files.
       var s = this.files[0].src.filter(function(filepath) {
@@ -101,9 +101,8 @@ module.exports = function(grunt) {
     }
 
     // Writing to file
-    grunt.file.write(options.dest, bookmark);
-    grunt.log.ok(this.target + ' bookmarklet has been written to ' +
-                 options.dest);
+    grunt.file.write(dest, bookmark);
+    grunt.log.ok(this.target + ' bookmarklet has been written to ' + dest);
   }
 
   // Registering the task
