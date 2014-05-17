@@ -7,32 +7,15 @@ var uglify = require('uglify-js'),
     cp = require('copy-paste').noConflict(),
     defaultOptions = require('../config.json');
 
-// Templates
-var template =
-[";(function(undefined) {",
-
-  "// Creating script",
-  "var body = document.getElementsByTagName('body')[0],",
-  "    script = document.createElement('script');",
-
-  "// Setting correct attributes",
-  "script.src = '<%= url %>';",
-  "script.type = 'text/javascript';",
-  "script.id = 'artoo_injected_script';",
-  "script.setAttribute('settings', JSON.stringify(<%= settings %>));",
-
-  "<%= random %>",
-
-  "// Appending to body",
-  "body.appendChild(script);",
-"})();"].join('\n');
-
 // Shorteners
 function minify(string) {
   return uglify.minify(string, {fromString: true}).code;
 }
 
 module.exports = function(grunt) {
+
+  // Templates
+  var template = grunt.file.read(__dirname + '/../templates/bookmarklet.tpl');
 
   // artoo's grunt multitask
   function multitask() {
