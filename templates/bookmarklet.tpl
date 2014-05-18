@@ -1,5 +1,8 @@
 ;(function(undefined) {
 
+  // Settings
+  var s = <%= settings %>;
+
   // Detecting artoo in page
   var inject = true;
   if (typeof this.artoo === 'object') {
@@ -10,8 +13,12 @@
       artoo.log.verbose('artoo already lies within this page. No need to ' +
                         'inject him again.');
 
+      // We reload the settings
+      artoo.loadSettings(s);
+
       // If artoo has some scripts registered, we want to execute them again.
       artoo.hooks.trigger('exec');
+      inject = false;
     }
   }
   else if (inject){
@@ -24,7 +31,7 @@
     script.src = '<%= url %>';
     script.type = 'text/javascript';
     script.id = 'artoo_injected_script';
-    script.setAttribute('settings', JSON.stringify(<%= settings %>));
+    script.setAttribute('settings', JSON.stringify(s));
 
     <%= random %>
 

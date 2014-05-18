@@ -20,6 +20,7 @@ module.exports = function(grunt) {
     artoo: {
       dev: {
         options: {
+          url: '//localhost:8000/build/artoo.concat.js',
           random: true
         }
       },
