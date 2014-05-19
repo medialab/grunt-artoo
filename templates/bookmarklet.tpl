@@ -27,6 +27,9 @@
     var body = document.getElementsByTagName('body')[0],
         script = document.createElement('script');
 
+    // Announcing
+    <%= loadingText %>
+
     // Setting correct attributes
     script.src = '<%= url %>';
     script.type = 'text/javascript';

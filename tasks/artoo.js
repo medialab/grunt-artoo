@@ -62,6 +62,9 @@ module.exports = function(grunt) {
         data: {
           settings: JSON.stringify(options.settings),
           url: options.url,
+          loadingText: options.loadingText ?
+            "console.log('" + options.loadingText + "');" :
+            "",
           random: options.random ?
             "var r = Math.random();" +
             "script.src += '?r=' + r;" :
