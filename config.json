@@ -1,5 +1,5 @@
 {
-  "url": "https://raw.githubusercontent.com/medialab/artoo/master/build/artoo.min.js",
+  "url": "https://rawgit.com/medialab/artoo/master/build/artoo.min.js",
   "clipboard": true,
   "loadingText": "artoo is loading...",
   "random": false,
