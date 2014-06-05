@@ -35,7 +35,7 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "copy-paste": "^0.2.0",
+    "copy-paste": "^0.2.2",
     "uglify-js": "^2.4.13"
   }
 }
