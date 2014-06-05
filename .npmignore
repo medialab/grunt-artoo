@@ -1,0 +1,10 @@
+.gitignore
+.npmignore
+Gruntfile.js
+
+# Folders
+test/
+node_modules/
+
+# Files
+*.min.js
