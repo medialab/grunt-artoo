@@ -7,9 +7,13 @@ var uglify = require('uglify-js'),
     cp = require('copy-paste').noConflict(),
     defaultOptions = require('../config.json');
 
-// Shorteners
+// Helpers
 function minify(string) {
   return uglify.minify(string, {fromString: true}).code;
+}
+
+function isValidVersion(version) {
+  return version === 'latest' || version.split('.').length === 3;
 }
 
 module.exports = function(grunt) {
@@ -23,10 +27,18 @@ module.exports = function(grunt) {
     // Default options
     var options = this.options(defaultOptions),
         bookmark;
+    delete options.settings.eval;
 
     // Default destination
     var dest = (this.files[0] && this.files[0].dest) ||
       'artoo.' + this.target + '.bookmarklet.min.js';
+
+    // Url from version
+    if (!isValidVersion(options.version))
+      throw TypeError('grunt-artoo: invalid artoo version.');
+
+    var url = options.url ||
+              options.prodUrl + 'artoo-' + options.version + '.min.js';
 
     // If user specified files, we need to concat/uglify them to be
     // evaluated by artoo on initialization.
@@ -54,14 +66,13 @@ module.exports = function(grunt) {
       options.settings.eval = JSON.stringify(s);
     }
 
-
     // Rendering the bookmarklet template
     bookmark = grunt.template.process(
       template,
       {
         data: {
           settings: JSON.stringify(options.settings),
-          url: options.url,
+          url: url,
           loadingText: options.loadingText ?
             "console.log('" + options.loadingText + "');" :
             "",

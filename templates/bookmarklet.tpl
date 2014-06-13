@@ -9,8 +9,8 @@
 
     // artoo is already here, we act accordingly
     // If artoo wants to be reloaded, let him do it.
-    if (!artoo.reload) {
-      artoo.log.verbose('artoo already lies within this page. No need to ' +
+    if (!artoo.settings.reload) {
+      artoo.log.verbose('artoo already exists within this page. No need to ' +
                         'inject him again.');
 
       // We reload the settings

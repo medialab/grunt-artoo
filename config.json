@@ -1,7 +1,9 @@
 {
-  "url": "//medialab.github.io/artoo/public/js/artoo.min.js",
+  "prodUrl": "//medialab.github.io/artoo/public/dist/",
+  "url": null,
   "clipboard": true,
   "loadingText": "artoo is loading...",
   "random": false,
-  "settings": {}
+  "settings": {},
+  "version": "latest"
 }

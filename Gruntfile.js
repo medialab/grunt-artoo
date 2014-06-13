@@ -21,19 +21,33 @@ module.exports = function(grunt) {
       dev: {
         options: {
           url: '//localhost:8000/build/artoo.concat.js',
-          random: true
+          random: true,
+          loadingText: null,
+          settings: {
+            log: {
+              enabled: true
+            }
+          }
         }
       },
       prod: {
-        options: {},
         src: './test/resources/dummy-script.js'
       },
       multi: {
-        options: {},
         src: [
           './test/resources/dummy-script1.js',
           './test/resources/dummy-script2.js'
         ]
+      },
+      version: {
+        options: {
+          version: '0.0.2',
+          settings: {
+            instructions: {
+              autoRecord: false
+            }
+          }
+        }
       }
     },
   });
