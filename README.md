@@ -7,7 +7,7 @@
 # grunt-artoo
 The **grunt-artoo** task enables you to create custom bookmarklets.
 
-Those are especially useful when you need precise settings for **artoo** or when you need to inject your own code using **artoo** as a framework.
+Those are especially useful when you need precise settings for **artoo.js** or when you need to inject your own code using **artoo.js** as a framework.
 
 This also makes possible the creation of bookmarklet scripts or applications that even non-developers can use.
 
