@@ -13,7 +13,10 @@ function minify(string) {
 }
 
 function isValidVersion(version) {
-  return version === 'latest' || version.split('.').length === 3;
+  return typeof version === 'string' &&
+         (version === 'latest' ||
+          version === 'edge' ||
+          version.split('.').length === 3);
 }
 
 module.exports = function(grunt) {
@@ -35,7 +38,7 @@ module.exports = function(grunt) {
 
     // Url from version
     if (!isValidVersion(options.version))
-      throw TypeError('grunt-artoo: invalid artoo version.');
+      throw TypeError('grunt-artoo: invalid version.');
 
     var url = options.url ||
               options.prodUrl + 'artoo-' + options.version + '.min.js';
