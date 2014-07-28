@@ -21,7 +21,9 @@
       inject = false;
     }
   }
-  else if (inject){
+
+  // Do we need to inject?
+  if (inject){
 
     // artoo is not here, we inject it
     var body = document.getElementsByTagName('body')[0],
