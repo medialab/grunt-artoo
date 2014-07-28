@@ -2,7 +2,7 @@
   "prodUrl": "//medialab.github.io/artoo/public/dist/",
   "url": null,
   "clipboard": true,
-  "loadingText": "artoo is loading...",
+  "loadingText": "artoo.js is loading...",
   "random": false,
   "settings": {},
   "version": "latest"
