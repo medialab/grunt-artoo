@@ -23,7 +23,7 @@
   }
 
   // Do we need to inject?
-  if (inject){
+  if (inject) {
 
     // Searching for mount node
     var mountNode = document.getElementsByTagName('body')[0];
