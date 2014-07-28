@@ -25,9 +25,15 @@
   // Do we need to inject?
   if (inject){
 
+    // Searching for mount node
+    var mountNode = document.getElementsByTagName('body')[0];
+    if (!mountNode) {
+      mountNode = document.createElement('body');
+      document.firstChild.appendChild(mountNode);
+    }
+
     // artoo is not here, we inject it
-    var body = document.getElementsByTagName('body')[0],
-        script = document.createElement('script');
+    var script = document.createElement('script');
 
     // Announcing
     <%= loadingText %>
@@ -41,6 +47,6 @@
     <%= random %>
 
     // Appending to body
-    body.appendChild(script);
+    mountNode.appendChild(script);
   }
 }).call(this);
