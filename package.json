@@ -1,6 +1,6 @@
 {
   "name": "grunt-artoo",
-  "description": "A grunt task to create artoo bookmarklets.",
+  "description": "A grunt task to create artoo.js bookmarklets.",
   "version": "0.0.4",
   "homepage": "https://github.com/medialab/grunt-artoo",
   "author": {
